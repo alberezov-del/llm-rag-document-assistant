@@ -13,4 +13,3 @@ app = FastAPI(
     description="A local RAG assistant for PDF, TXT, and Markdown documents.",
 )
 app.include_router(router, prefix=settings.api_prefix)
-

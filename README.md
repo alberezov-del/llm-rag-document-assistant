@@ -1,5 +1,7 @@
 # LLM RAG Document Assistant
 
+[![CI](https://github.com/alberezov-del/llm-rag-document-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/alberezov-del/llm-rag-document-assistant/actions/workflows/ci.yml)
+
 FastAPI service that turns PDF, TXT, and Markdown files into a local RAG knowledge base.
 Users upload a document, the service extracts text, splits it into chunks, creates embeddings,
 stores them in ChromaDB, and answers questions with cited source snippets.
@@ -14,7 +16,8 @@ Docker packaging, and honest local demo behavior without real API keys.
 - It separates document loading, chunking, embeddings, vector search, prompting, and LLM calls.
 - It works without paid credentials through deterministic mock providers.
 - It is testable: core logic is covered by pytest and does not require API keys.
-- It is production-shaped: FastAPI, Pydantic schemas, Docker, `.env.example`, and lint tooling.
+- It is production-shaped: FastAPI, Pydantic schemas, Docker, GitHub Actions CI,
+  `.env.example`, and lint tooling.
 
 ## Stack
 
@@ -28,7 +31,7 @@ Docker packaging, and honest local demo behavior without real API keys.
 - Docker and docker-compose
 - pytest
 - ruff
-- optional mypy configuration
+- mypy
 
 ## Architecture
 
@@ -50,10 +53,10 @@ Detailed architecture is documented in [docs/architecture.md](docs/architecture.
 ## Local Setup
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/alberezov-del/llm-rag-document-assistant.git
 cd llm-rag-document-assistant
 
-python3.11 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -e ".[dev]"
@@ -168,6 +171,7 @@ curl -X DELETE "http://127.0.0.1:8000/documents/<document_id>"
 | `CHUNK_SIZE` | `1000` | Target chunk size in characters. |
 | `CHUNK_OVERLAP` | `150` | Overlap between chunks. |
 | `MAX_PREVIEW_CHARS` | `240` | Maximum source preview length in API responses. |
+| `MAX_UPLOAD_BYTES` | `10485760` | Maximum accepted upload size in bytes. |
 | `OPENAI_API_KEY` | empty | API key for OpenAI-compatible providers. |
 | `OPENAI_BASE_URL` | `https://api.openai.com/v1` | Provider base URL. |
 | `LLM_MODEL` | `gpt-4o-mini` | Chat model name. |
@@ -223,6 +227,10 @@ mypy app
 
 Tests run without API keys.
 
+## License
+
+MIT License. See [LICENSE](LICENSE).
+
 ## Limitations and Future Improvements
 
 - Mock embeddings are deterministic but not semantically strong.
@@ -231,7 +239,7 @@ Tests run without API keys.
 - ChromaDB is local-only in this project.
 - Chunking is character-based; token-aware chunking would be better for production.
 - Future improvements could add streaming answers, reranking, OCR, async ingestion jobs,
-  file size limits, user accounts, and an evaluation dataset for retrieval quality.
+  user accounts, rate limiting, and an evaluation dataset for retrieval quality.
 
 ## What I Learned
 
@@ -240,4 +248,3 @@ Tests run without API keys.
 - How to make LLM projects reproducible without storing secrets.
 - How to return cited sources instead of opaque LLM answers.
 - How to test RAG behavior in mock mode without depending on network calls.
-

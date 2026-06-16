@@ -19,7 +19,8 @@ document upload
 ## 1. Document Upload
 
 `POST /documents/upload` accepts PDF, TXT, Markdown, and `.markdown` files. The FastAPI
-route reads the uploaded bytes and passes them to `RAGPipeline.ingest_file`.
+route rejects uploads larger than `MAX_UPLOAD_BYTES`, reads the uploaded bytes, and passes
+valid content to `RAGPipeline.ingest_file`.
 
 ## 2. Text Extraction
 
@@ -122,4 +123,3 @@ data/
 
 `DELETE /documents/{document_id}` removes the document metadata, uploaded file, chunk JSON,
 and ChromaDB vectors for that document.
-

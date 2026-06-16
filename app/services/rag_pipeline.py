@@ -1,3 +1,4 @@
+from contextlib import suppress
 from uuid import uuid4
 
 from app.core.config import Settings
@@ -66,16 +67,25 @@ class RAGPipeline:
             )
             for chunk in raw_chunks
         ]
-        embeddings = self.embedding_provider.embed_texts([chunk.text for chunk in chunks])
-        metadata = self.document_store.save_document(
-            document_id=document_id,
-            filename=safe_filename,
-            content_type=content_type,
-            raw_content=content,
-            extracted_text=text,
-            chunks=chunks,
-        )
-        self.vector_store.add_chunks(metadata, chunks, embeddings)
+        metadata = None
+        try:
+            embeddings = self.embedding_provider.embed_texts([chunk.text for chunk in chunks])
+            metadata = self.document_store.save_document(
+                document_id=document_id,
+                filename=safe_filename,
+                content_type=content_type,
+                raw_content=content,
+                extracted_text=text,
+                chunks=chunks,
+            )
+            self.vector_store.add_chunks(metadata, chunks, embeddings)
+        except Exception:
+            if metadata is not None:
+                with suppress(Exception):
+                    self.document_store.delete_document(document_id)
+                with suppress(Exception):
+                    self.vector_store.delete_document(document_id)
+            raise
 
         return DocumentUploadResponse(
             document_id=metadata.document_id,
@@ -162,4 +172,3 @@ class RAGPipeline:
             model=settings.llm_model,
             timeout_seconds=settings.request_timeout_seconds,
         )
-

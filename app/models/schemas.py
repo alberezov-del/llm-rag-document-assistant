@@ -65,4 +65,3 @@ class HealthResponse(BaseModel):
     llm_mode: str
     embeddings_mode: str
     extra: dict[str, Any] = Field(default_factory=dict)
-

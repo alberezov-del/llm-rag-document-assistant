@@ -66,4 +66,3 @@ class TextChunker:
                 best = max(best, candidate + len(separator))
 
         return best if best > start else hard_end
-

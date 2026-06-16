@@ -62,10 +62,10 @@ class ChromaVectorStore:
         results = cast(
             dict[str, Any],
             self.collection.query(
-            query_embeddings=cast(Any, [query_embedding]),
-            n_results=top_k,
-            where=where,
-            include=["documents", "metadatas", "distances"],
+                query_embeddings=cast(Any, [query_embedding]),
+                n_results=top_k,
+                where=where,
+                include=["documents", "metadatas", "distances"],
             ),
         )
 

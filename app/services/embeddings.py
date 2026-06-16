@@ -65,4 +65,3 @@ class OpenAICompatibleEmbeddingProvider:
         payload = response.json()
         data = sorted(payload["data"], key=lambda item: item["index"])
         return [item["embedding"] for item in data]
-

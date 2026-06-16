@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     chunk_size: int = 1_000
     chunk_overlap: int = 150
     max_preview_chars: int = 240
+    max_upload_bytes: int = Field(default=10 * 1024 * 1024, gt=0)
 
     openai_api_key: str | None = None
     openai_base_url: str = "https://api.openai.com/v1"
@@ -66,4 +67,3 @@ def get_settings() -> Settings:
     settings = Settings()
     settings.ensure_directories()
     return settings
-

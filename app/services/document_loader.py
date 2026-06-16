@@ -46,4 +46,3 @@ def _decode_text(content: bytes) -> str:
     if not text:
         raise ValueError("The uploaded document is empty")
     return text
-

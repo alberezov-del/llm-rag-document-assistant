@@ -39,4 +39,3 @@ def test_rag_pipeline_ingests_and_answers_in_mock_mode(tmp_path: Path) -> None:
     assert response.sources[0].document_id == uploaded.document_id
     assert "Mock answer" in response.answer
     assert "source" in response.answer.lower() or "retrieval" in response.answer.lower()
-

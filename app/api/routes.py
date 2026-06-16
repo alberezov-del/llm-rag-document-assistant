@@ -44,11 +44,18 @@ async def upload_document(
     file: UploadFileDep,
     pipeline: PipelineDep,
 ) -> DocumentUploadResponse:
-    content = await file.read()
     if not file.filename:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Uploaded file must have a filename",
+        )
+
+    content = await file.read()
+    max_upload_bytes = pipeline.settings.max_upload_bytes
+    if len(content) > max_upload_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+            detail=f"Uploaded file is too large. Maximum size is {max_upload_bytes} bytes.",
         )
 
     try:

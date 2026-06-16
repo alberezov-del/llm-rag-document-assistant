@@ -54,13 +54,7 @@ class OpenAICompatibleLLMClient:
             },
             {
                 "role": "user",
-                "content": (
-                    "Context:\n"
-                    f"{context}\n\n"
-                    "Question:\n"
-                    f"{question}\n\n"
-                    "Answer:"
-                ),
+                "content": (f"Context:\n{context}\n\nQuestion:\n{question}\n\nAnswer:"),
             },
         ]
         response = httpx.post(
