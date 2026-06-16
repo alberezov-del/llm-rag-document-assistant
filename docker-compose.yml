@@ -1,0 +1,17 @@
+services:
+  rag-api:
+    build: .
+    container_name: llm-rag-document-assistant
+    ports:
+      - "8000:8000"
+    environment:
+      DATA_DIR: /app/data
+      CHROMA_DIR: /app/data/chroma
+      USE_MOCK_LLM: "true"
+      USE_MOCK_EMBEDDINGS: "true"
+    volumes:
+      - rag_data:/app/data
+
+volumes:
+  rag_data:
+
